@@ -80,9 +80,11 @@ function Quiz({ profile, onRestart }) {
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const inputRef = useRef(null);
+  const nextRef = useRef(null);
 
   useEffect(() => {
     if (feedback === null) inputRef.current?.focus();
+    else nextRef.current?.focus();
   }, [feedback, problem]);
 
   function submit() {
@@ -137,7 +139,7 @@ function Quiz({ profile, onRestart }) {
           ) : (
             <span>Not quite — the answer was <strong>{problem.answer}</strong></span>
           )}
-          <button className="next-btn" onClick={next}>Next →</button>
+          <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
         </div>
       )}
 
