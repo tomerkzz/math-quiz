@@ -139,9 +139,9 @@ function Quiz({ profile, onRestart }) {
       ) : (
         <div className={`feedback ${feedback}`}>
           {feedback === 'correct' ? (
-            <span>Correct! Well done 🎉</span>
+            <span>😊 Correct! Well done 😊</span>
           ) : (
-            <span>Not quite — the answer was <strong>{problem.answer}</strong></span>
+            <span>😢 Not quite — the answer was <strong>{problem.answer}</strong> 😢</span>
           )}
           <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
         </div>
