@@ -14,10 +14,10 @@ body {
 
 .card {
   background: white;
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: 24px;
+  padding: 56px;
   width: 100%;
-  max-width: 480px;
+  max-width: 660px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
@@ -25,7 +25,7 @@ body {
 
 .setup h1 {
   margin: 0 0 4px;
-  font-size: 2rem;
+  font-size: 2.8rem;
   color: #4c2c8f;
   text-align: center;
 }
@@ -39,17 +39,18 @@ body {
 .setup label {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
+  font-size: 1.1rem;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .setup input[type='text'] {
-  padding: 10px 14px;
+  padding: 14px 18px;
   border: 2px solid #ddd;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
   transition: border-color 0.2s;
   outline: none;
 }
@@ -67,12 +68,12 @@ body {
 
 .grade-btn,
 .level-btn {
-  padding: 8px 16px;
+  padding: 12px 22px;
   border: 2px solid #ddd;
-  border-radius: 10px;
+  border-radius: 12px;
   background: white;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 500;
   transition: all 0.15s;
 }
@@ -93,12 +94,12 @@ body {
 .start-btn {
   width: 100%;
   margin-top: 8px;
-  padding: 14px;
+  padding: 18px;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  border-radius: 14px;
+  font-size: 1.3rem;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
@@ -130,31 +131,31 @@ body {
 }
 
 .greeting {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #555;
 }
 
 .profile-meta {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #999;
 }
 
 .score {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   background: #f0ebff;
   color: #764ba2;
-  padding: 4px 14px;
+  padding: 8px 20px;
   border-radius: 20px;
 }
 
 .problem {
-  font-size: 2.8rem;
+  font-size: 4rem;
   font-weight: 800;
   text-align: center;
   color: #2d1b69;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   letter-spacing: 1px;
 }
 
@@ -165,10 +166,10 @@ body {
 
 .answer-input {
   flex: 1;
-  padding: 12px 16px;
-  font-size: 1.3rem;
+  padding: 16px 20px;
+  font-size: 1.6rem;
   border: 2px solid #ddd;
-  border-radius: 12px;
+  border-radius: 14px;
   outline: none;
   transition: border-color 0.2s;
   text-align: center;
@@ -179,12 +180,12 @@ body {
 }
 
 .submit-btn {
-  padding: 12px 24px;
+  padding: 16px 32px;
   background: #764ba2;
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 14px;
+  font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -203,11 +204,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  padding: 22px 28px;
+  border-radius: 14px;
+  font-size: 1.3rem;
   font-weight: 600;
-  gap: 12px;
+  gap: 16px;
 }
 
 .feedback.correct {
