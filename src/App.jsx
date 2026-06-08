@@ -10,10 +10,10 @@ const LEVELS = [
   { value: 'excellent', label: 'Excellent' },
 ];
 
-function Setup({ onStart }) {
-  const [name, setName] = useState('');
-  const [grade, setGrade] = useState('');
-  const [level, setLevel] = useState('');
+function Setup({ onStart, initial }) {
+  const [name, setName] = useState(initial?.name ?? '');
+  const [grade, setGrade] = useState(initial?.grade ?? '');
+  const [level, setLevel] = useState(initial?.level ?? '');
 
   const valid = name.trim() && grade && level;
 
@@ -148,9 +148,16 @@ function Quiz({ profile, onRestart }) {
 
 export default function App() {
   const [profile, setProfile] = useState(null);
+  const [previous, setPrevious] = useState(null);
+
+  function handleStart(p) {
+    setPrevious(p);
+    setProfile(p);
+  }
+
   return profile ? (
     <Quiz profile={profile} onRestart={() => setProfile(null)} />
   ) : (
-    <Setup onStart={setProfile} />
+    <Setup onStart={handleStart} initial={previous} />
   );
 }
