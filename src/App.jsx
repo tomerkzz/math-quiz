@@ -74,25 +74,46 @@ function Setup({ onStart, initial }) {
   );
 }
 
+const BONUS_INTERVAL = 5;
+
+function bonusMessage(correct) {
+  if (correct === BONUS_INTERVAL) return { emoji: '🏆', title: 'Perfect round!', sub: 'You got all 5 right!' };
+  if (correct >= 4) return { emoji: '🌟', title: 'Amazing!', sub: `${correct} out of 5 — nearly perfect!` };
+  if (correct >= 3) return { emoji: '👍', title: 'Good job!', sub: `${correct} out of 5 — keep it up!` };
+  return { emoji: '💪', title: 'Keep going!', sub: `${correct} out of 5 — you'll do better next round!` };
+}
+
 function Quiz({ profile, onRestart }) {
   const [problem, setProblem] = useState(() => generateProblem(profile.grade, profile.level));
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState({ correct: 0, total: 0 });
+  const [roundCorrect, setRoundCorrect] = useState(0);
+  const [showBonus, setShowBonus] = useState(false);
   const inputRef = useRef(null);
   const nextRef = useRef(null);
+  const bonusRef = useRef(null);
 
   useEffect(() => {
-    if (feedback === null) inputRef.current?.focus();
+    if (showBonus) bonusRef.current?.focus();
+    else if (feedback === null) inputRef.current?.focus();
     else nextRef.current?.focus();
-  }, [feedback, problem]);
+  }, [feedback, problem, showBonus]);
 
   function submit() {
     if (input.trim() === '') return;
     const userAnswer = parseInt(input.trim(), 10);
     const isCorrect = userAnswer === problem.answer;
+    const newRoundCorrect = roundCorrect + (isCorrect ? 1 : 0);
+    const newTotal = score.total + 1;
     setFeedback(isCorrect ? 'correct' : 'wrong');
-    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }));
+    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: newTotal }));
+    setRoundCorrect(newRoundCorrect);
+    if (newTotal % BONUS_INTERVAL === 0) {
+      setTimeout(() => {
+        setShowBonus(true);
+      }, 800);
+    }
   }
 
   function next() {
@@ -101,15 +122,24 @@ function Quiz({ profile, onRestart }) {
     setFeedback(null);
   }
 
+  function dismissBonus() {
+    setShowBonus(false);
+    setRoundCorrect(0);
+    next();
+  }
+
   function handleKey(e) {
     if (e.key === 'Enter') {
-      if (feedback === null) submit();
+      if (showBonus) dismissBonus();
+      else if (feedback === null) submit();
       else next();
     }
   }
 
+  const bonus = bonusMessage(roundCorrect);
+
   return (
-    <div className="card quiz">
+    <div className="card quiz" onKeyDown={handleKey}>
       <div className="quiz-header">
         <div className="profile-info">
           <span className="greeting">Hi {profile.name}!</span>
@@ -119,32 +149,43 @@ function Quiz({ profile, onRestart }) {
         <span className="score">{score.correct} / {score.total}</span>
       </div>
 
-      <div className="problem">{problem.question} = ?</div>
-
-      {feedback === null ? (
-        <div className="answer-row">
-          <input
-            ref={inputRef}
-            type="number"
-            className="answer-input"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyUp={handleKey}
-            placeholder="Your answer"
-          />
-          <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
-            Check
-          </button>
+      {showBonus ? (
+        <div className="bonus">
+          <div className="bonus-emoji">{bonus.emoji}</div>
+          <div className="bonus-title">{bonus.title}</div>
+          <div className="bonus-sub">{bonus.sub}</div>
+          <button ref={bonusRef} className="start-btn" onClick={dismissBonus}>Keep going! →</button>
         </div>
       ) : (
-        <div className={`feedback ${feedback}`}>
-          {feedback === 'correct' ? (
-            <span>😊 Correct! Well done 😊</span>
+        <>
+          <div className="problem">{problem.question} = ?</div>
+
+          {feedback === null ? (
+            <div className="answer-row">
+              <input
+                ref={inputRef}
+                type="number"
+                className="answer-input"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyUp={handleKey}
+                placeholder="Your answer"
+              />
+              <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
+                Check
+              </button>
+            </div>
           ) : (
-            <span>😢 Not quite — the answer was <strong>{problem.answer}</strong> 😢</span>
+            <div className={`feedback ${feedback}`}>
+              {feedback === 'correct' ? (
+                <span>😊 Correct! Well done 😊</span>
+              ) : (
+                <span>😢 Not quite — the answer was <strong>{problem.answer}</strong> 😢</span>
+              )}
+              <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
+            </div>
           )}
-          <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
-        </div>
+        </>
       )}
 
     </div>

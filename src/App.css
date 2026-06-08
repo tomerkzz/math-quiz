@@ -240,6 +240,32 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.bonus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+}
+
+.bonus-emoji {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.bonus-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2d1b69;
+}
+
+.bonus-sub {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
 .restart-link {
   background: none;
   border: none;
