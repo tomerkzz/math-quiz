@@ -104,28 +104,28 @@ function Quiz({ profile, onRestart }) {
     if (input.trim() === '') return;
     const userAnswer = parseInt(input.trim(), 10);
     const isCorrect = userAnswer === problem.answer;
-    const newRoundCorrect = roundCorrect + (isCorrect ? 1 : 0);
-    const newTotal = score.total + 1;
     setFeedback(isCorrect ? 'correct' : 'wrong');
-    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: newTotal }));
-    setRoundCorrect(newRoundCorrect);
-    if (newTotal % BONUS_INTERVAL === 0) {
-      setTimeout(() => {
-        setShowBonus(true);
-      }, 800);
-    }
+    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }));
+    setRoundCorrect(r => r + (isCorrect ? 1 : 0));
   }
 
   function next() {
-    setProblem(generateProblem(profile.grade, profile.level));
-    setInput('');
-    setFeedback(null);
+    const newTotal = score.total + 1;
+    if (newTotal % BONUS_INTERVAL === 0) {
+      setShowBonus(true);
+      setFeedback(null);
+      setInput('');
+    } else {
+      setProblem(generateProblem(profile.grade, profile.level));
+      setInput('');
+      setFeedback(null);
+    }
   }
 
   function dismissBonus() {
     setShowBonus(false);
     setRoundCorrect(0);
-    next();
+    setProblem(generateProblem(profile.grade, profile.level));
   }
 
   function handleKey(e) {
