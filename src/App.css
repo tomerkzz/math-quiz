@@ -1,0 +1,244 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Setup ── */
+
+.setup h1 {
+  margin: 0 0 4px;
+  font-size: 2rem;
+  color: #4c2c8f;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #888;
+  margin: 0 0 28px;
+}
+
+.setup label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.setup input[type='text'] {
+  padding: 10px 14px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.setup input[type='text']:focus {
+  border-color: #764ba2;
+}
+
+.grade-buttons,
+.level-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.grade-btn,
+.level-btn {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.grade-btn:hover,
+.level-btn:hover {
+  border-color: #764ba2;
+  color: #764ba2;
+}
+
+.grade-btn.selected,
+.level-btn.selected {
+  background: #764ba2;
+  border-color: #764ba2;
+  color: white;
+}
+
+.start-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.start-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.start-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Quiz ── */
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.greeting {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.score {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: #f0ebff;
+  color: #764ba2;
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+.problem {
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-align: center;
+  color: #2d1b69;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+.answer-row {
+  display: flex;
+  gap: 10px;
+}
+
+.answer-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1.3rem;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+  text-align: center;
+}
+
+.answer-input:focus {
+  border-color: #764ba2;
+}
+
+.submit-btn {
+  padding: 12px 24px;
+  background: #764ba2;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  gap: 12px;
+}
+
+.feedback.correct {
+  background: #e8f9ee;
+  color: #1a7f3c;
+}
+
+.feedback.wrong {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+.next-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: white;
+  color: #4c2c8f;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.next-btn:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.restart-link {
+  display: block;
+  margin-top: 24px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.restart-link:hover {
+  color: #764ba2;
+}
