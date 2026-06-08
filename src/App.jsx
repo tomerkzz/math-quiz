@@ -111,7 +111,11 @@ function Quiz({ profile, onRestart }) {
   return (
     <div className="card quiz">
       <div className="quiz-header">
-        <span className="greeting">Hi {profile.name}!</span>
+        <div className="profile-info">
+          <span className="greeting">Hi {profile.name}!</span>
+          <span className="profile-meta">Grade {profile.grade} · {LEVELS.find(l => l.value === profile.level)?.label}</span>
+          <button className="restart-link" onClick={onRestart}>Change settings</button>
+        </div>
         <span className="score">{score.correct} / {score.total}</span>
       </div>
 
@@ -143,7 +147,6 @@ function Quiz({ profile, onRestart }) {
         </div>
       )}
 
-      <button className="restart-link" onClick={onRestart}>Change settings</button>
     </div>
   );
 }

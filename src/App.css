@@ -123,10 +123,21 @@ body {
   margin-bottom: 32px;
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .greeting {
   font-size: 1.1rem;
   font-weight: 600;
   color: #555;
+}
+
+.profile-meta {
+  font-size: 0.85rem;
+  color: #999;
 }
 
 .score {
@@ -228,15 +239,14 @@ body {
 }
 
 .restart-link {
-  display: block;
-  margin-top: 24px;
   background: none;
   border: none;
   color: #aaa;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   cursor: pointer;
   text-decoration: underline;
-  text-align: center;
+  text-align: left;
+  padding: 0;
 }
 
 .restart-link:hover {
