@@ -125,7 +125,7 @@ function Quiz({ profile, onRestart }) {
             className="answer-input"
             value={input}
             onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKey}
+            onKeyUp={handleKey}
             placeholder="Your answer"
           />
           <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
