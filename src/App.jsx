@@ -142,19 +142,10 @@ function Quiz({ profile, onRestart }) {
     setFeedback(null);
   }
 
-  function handleKey(e) {
-    if (e.key === 'Enter') {
-      if (showBonus) dismissBonus();
-      else if (feedback === null) submit();
-      else if (feedback === 'correct') next();
-      else tryAgain();
-    }
-  }
-
   const bonus = bonusMessage(roundCorrect);
 
   return (
-    <div className="card quiz" onKeyDown={handleKey}>
+    <div className="card quiz">
       <div className="quiz-header">
         <div className="profile-info">
           <span className="greeting">Hi {profile.name}!</span>
@@ -169,7 +160,8 @@ function Quiz({ profile, onRestart }) {
           <div className="bonus-emoji">{bonus.emoji}</div>
           <div className="bonus-title">{bonus.title}</div>
           <div className="bonus-sub">{bonus.sub}</div>
-          <button ref={bonusRef} className="start-btn" onClick={dismissBonus}>Keep going! →</button>
+          <button ref={bonusRef} className="start-btn" onClick={dismissBonus}
+            onKeyDown={e => e.key === 'Enter' && dismissBonus()}>Keep going! →</button>
         </div>
       ) : (
         <>
@@ -184,7 +176,7 @@ function Quiz({ profile, onRestart }) {
                   className="answer-input"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  onKeyUp={handleKey}
+                  onKeyUp={e => e.key === 'Enter' && submit()}
                   placeholder="Your answer"
                 />
                 <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
@@ -201,12 +193,14 @@ function Quiz({ profile, onRestart }) {
           ) : feedback === 'correct' ? (
             <div className="feedback correct">
               <span>😊 Correct! Well done 😊</span>
-              <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
+              <button ref={nextRef} className="next-btn" onClick={next}
+                onKeyDown={e => e.key === 'Enter' && next()}>Next →</button>
             </div>
           ) : (
             <div className="feedback wrong">
               <span>😢 Not quite, try again!</span>
-              <button ref={nextRef} className="next-btn" onClick={tryAgain}>Try again →</button>
+              <button ref={nextRef} className="next-btn" onClick={tryAgain}
+                onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') tryAgain(); }}>Try again →</button>
             </div>
           )}
         </>
