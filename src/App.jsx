@@ -128,11 +128,17 @@ function Quiz({ profile, onRestart }) {
     setProblem(generateProblem(profile.grade, profile.level));
   }
 
+  function tryAgain() {
+    setInput('');
+    setFeedback(null);
+  }
+
   function handleKey(e) {
     if (e.key === 'Enter') {
       if (showBonus) dismissBonus();
       else if (feedback === null) submit();
-      else next();
+      else if (feedback === 'correct') next();
+      else tryAgain();
     }
   }
 
@@ -175,14 +181,15 @@ function Quiz({ profile, onRestart }) {
                 Check
               </button>
             </div>
-          ) : (
-            <div className={`feedback ${feedback}`}>
-              {feedback === 'correct' ? (
-                <span>😊 Correct! Well done 😊</span>
-              ) : (
-                <span>😢 Not quite — the answer was <strong>{problem.answer}</strong> 😢</span>
-              )}
+          ) : feedback === 'correct' ? (
+            <div className="feedback correct">
+              <span>😊 Correct! Well done 😊</span>
               <button ref={nextRef} className="next-btn" onClick={next}>Next →</button>
+            </div>
+          ) : (
+            <div className="feedback wrong">
+              <span>😢 Not quite, try again!</span>
+              <button ref={nextRef} className="next-btn" onClick={tryAgain}>Try again →</button>
             </div>
           )}
         </>
