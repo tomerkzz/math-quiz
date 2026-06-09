@@ -90,6 +90,7 @@ function Quiz({ profile, onRestart }) {
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [roundCorrect, setRoundCorrect] = useState(0);
   const [showBonus, setShowBonus] = useState(false);
+  const [showHint, setShowHint] = useState(false);
   const inputRef = useRef(null);
   const nextRef = useRef(null);
   const bonusRef = useRef(null);
@@ -99,6 +100,14 @@ function Quiz({ profile, onRestart }) {
     else if (feedback === null) inputRef.current?.focus();
     else nextRef.current?.focus();
   }, [feedback, problem, showBonus]);
+
+  // 10-second hint timer — resets on each new question
+  useEffect(() => {
+    if (feedback !== null || showBonus) return;
+    setShowHint(false);
+    const timer = setTimeout(() => setShowHint(true), 10000);
+    return () => clearTimeout(timer);
+  }, [problem, feedback, showBonus]);
 
   function submit() {
     if (input.trim() === '') return;
@@ -167,20 +176,28 @@ function Quiz({ profile, onRestart }) {
           <div className="problem">{problem.question} = ?</div>
 
           {feedback === null ? (
-            <div className="answer-row">
-              <input
-                ref={inputRef}
-                type="number"
-                className="answer-input"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyUp={handleKey}
-                placeholder="Your answer"
-              />
-              <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
-                Check
-              </button>
-            </div>
+            <>
+              <div className="answer-row">
+                <input
+                  ref={inputRef}
+                  type="number"
+                  className="answer-input"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyUp={handleKey}
+                  placeholder="Your answer"
+                />
+                <button className="submit-btn" onClick={submit} disabled={input.trim() === ''}>
+                  Check
+                </button>
+              </div>
+              {showHint && (
+                <div className="hint">
+                  💡 Hint: the answer starts with <strong>{String(problem.answer)[0]}</strong>
+                  {String(problem.answer).length > 1 && ` and has ${String(problem.answer).length} digits`}
+                </div>
+              )}
+            </>
           ) : feedback === 'correct' ? (
             <div className="feedback correct">
               <span>😊 Correct! Well done 😊</span>
