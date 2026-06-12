@@ -86,7 +86,8 @@ function bonusMessage(correct) {
 function Quiz({ profile, onRestart }) {
   const [problem, setProblem] = useState(() => generateProblem(profile.grade, profile.level));
   const [input, setInput] = useState('');
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState(null); // null | 'correct' | 'wrong' | 'giveup'
+  const [attempts, setAttempts] = useState(0);
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [roundCorrect, setRoundCorrect] = useState(0);
   const [showBonus, setShowBonus] = useState(false);
@@ -101,7 +102,6 @@ function Quiz({ profile, onRestart }) {
     else nextRef.current?.focus();
   }, [feedback, problem, showBonus]);
 
-  // 10-second hint timer — resets on each new question
   useEffect(() => {
     if (feedback !== null || showBonus) return;
     setShowHint(false);
@@ -113,13 +113,24 @@ function Quiz({ profile, onRestart }) {
     if (input.trim() === '') return;
     const userAnswer = parseInt(input.trim(), 10);
     const isCorrect = userAnswer === problem.answer;
-    setFeedback(isCorrect ? 'correct' : 'wrong');
-    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }));
-    setRoundCorrect(r => r + (isCorrect ? 1 : 0));
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+
+    if (isCorrect) {
+      setFeedback('correct');
+      setScore(s => ({ correct: s.correct + 1, total: s.total + 1 }));
+      setRoundCorrect(r => r + 1);
+    } else if (newAttempts >= 3) {
+      setFeedback('giveup');
+      setScore(s => ({ ...s, total: s.total + 1 }));
+    } else {
+      setFeedback('wrong');
+    }
   }
 
   function next() {
     const newTotal = score.total + 1;
+    setAttempts(0);
     if (newTotal % BONUS_INTERVAL === 0) {
       setShowBonus(true);
       setFeedback(null);
@@ -131,15 +142,15 @@ function Quiz({ profile, onRestart }) {
     }
   }
 
+  function tryAgain() {
+    setInput('');
+    setFeedback(null);
+  }
+
   function dismissBonus() {
     setShowBonus(false);
     setRoundCorrect(0);
     setProblem(generateProblem(profile.grade, profile.level));
-  }
-
-  function tryAgain() {
-    setInput('');
-    setFeedback(null);
   }
 
   const bonus = bonusMessage(roundCorrect);
@@ -161,7 +172,9 @@ function Quiz({ profile, onRestart }) {
           <div className="bonus-title">{bonus.title}</div>
           <div className="bonus-sub">{bonus.sub}</div>
           <button ref={bonusRef} className="start-btn" onClick={dismissBonus}
-            onKeyDown={e => e.key === 'Enter' && dismissBonus()}>Keep going! →</button>
+            onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') dismissBonus(); }}>
+            Keep going! →
+          </button>
         </div>
       ) : (
         <>
@@ -194,18 +207,29 @@ function Quiz({ profile, onRestart }) {
             <div className="feedback correct">
               <span>😊 Correct! Well done 😊</span>
               <button ref={nextRef} className="next-btn" onClick={next}
-                onKeyDown={e => e.key === 'Enter' && next()}>Next →</button>
+                onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') next(); }}>
+                Next →
+              </button>
             </div>
-          ) : (
+          ) : feedback === 'wrong' ? (
             <div className="feedback wrong">
               <span>😢 Not quite, try again!</span>
               <button ref={nextRef} className="next-btn" onClick={tryAgain}
-                onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') tryAgain(); }}>Try again →</button>
+                onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') tryAgain(); }}>
+                Try again →
+              </button>
+            </div>
+          ) : (
+            <div className="feedback giveup">
+              <span>🤗 Don&apos;t worry — next time you will get it! The answer was <strong>{problem.answer}</strong></span>
+              <button ref={nextRef} className="next-btn" onClick={next}
+                onKeyDown={e => { e.preventDefault(); if (e.key === 'Enter') next(); }}>
+                Next →
+              </button>
             </div>
           )}
         </>
       )}
-
     </div>
   );
 }
